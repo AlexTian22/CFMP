@@ -27,7 +27,7 @@ keypoint_visible_rate: 1.0
 logging:
   group: null
   id: null
-  mode: online
+  mode: offline
   name: 2023.01.16-20.20.06_train_diffusion_unet_hybrid_pusht_image
   project: diffusion_policy_debug
   resume: true

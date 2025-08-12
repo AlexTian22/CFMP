@@ -133,7 +133,7 @@ class PushTKeypointsRunner(BaseLowdimRunner):
             env_prefixs.append('test/')
             env_init_fn_dills.append(dill.dumps(init_fn))
 
-        env = AsyncVectorEnv(env_fns)
+        env = AsyncVectorEnv(env_fns, shared_memory=False)
 
         # test env
         # env.reset(seed=env_seeds)

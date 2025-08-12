@@ -160,3 +160,99 @@ class MultiStepWrapper(gym.Wrapper):
         for k, v in self.info.items():
             result[k] = list(v)
         return result
+
+
+class LIBEROMultiStepWrapper():
+    def __init__(self, 
+        env, 
+        n_obs_steps,
+        n_action_steps,
+    ):
+        self.env = env
+        self.n_obs_steps = n_obs_steps
+        self.n_action_steps = n_action_steps
+        
+        self.obs = deque(maxlen=n_obs_steps+1)
+        self.reward = list()
+        self.done = list()
+        self.info = defaultdict(lambda : deque(maxlen=n_obs_steps+1))
+
+    def seed(self, seed=None):
+        self.env.seed(seed)
+
+    def reset(self):
+        obs = self.env.reset()
+        self.obs.append(obs)
+        
+        self.obs = deque([obs], maxlen=self.n_obs_steps+1)
+        self.reward = list()
+        self.done = list()
+        self.info = defaultdict(lambda : deque(maxlen=self.n_obs_steps+1))
+
+        obs = self._get_obs(self.n_obs_steps)
+
+        return obs
+
+    def step(self, action):
+        """
+        actions: (n_action_steps,) + action_shape
+        """
+        for act in action:
+            # if len(self.done) > 0 and self.done[-1]:
+            #     # termination
+            #     break
+            observation, reward, done, info = self.env.step(act)
+
+            self.obs.append(observation)
+            self.reward.append(reward)
+
+            self.done.append(done)
+            self._add_info(info)
+        observation = self._get_obs(self.n_obs_steps)
+        reward = aggregate(self.reward, "max")
+        done = aggregate(self.done, 'max')
+        info = dict_take_last_n(self.info, self.n_obs_steps)
+        return observation, reward, done, info
+
+    def set_init_state(self, init_state): 
+        obs = self.env.set_init_state(init_state)
+        self.obs = deque([obs], maxlen=self.n_obs_steps+1)
+        self.reward = list()
+        self.done = list()
+        self.info = defaultdict(lambda : deque(maxlen=self.n_obs_steps+1))
+
+        obs = self._get_obs(self.n_obs_steps)
+
+        return obs
+
+    def close(self): 
+        self.env.close()
+        
+    def _get_obs(self, n_steps=1):
+        """
+        Output (n_steps,) + obs_shape
+        """
+        assert(len(self.obs) > 0)
+        result = dict()
+        for key in self.env.observation_space.keys():
+            result[key] = stack_last_n_obs(
+                [obs[key] for obs in self.obs],
+                n_steps
+            )
+        return result
+
+    def _add_info(self, info):
+        for key, value in info.items():
+            self.info[key].append(value)
+    
+    def get_rewards(self):
+        return self.reward
+    
+    def get_attr(self, name):
+        return getattr(self, name)
+    
+    def get_infos(self):
+        result = dict()
+        for k, v in self.info.items():
+            result[k] = list(v)
+        return result

@@ -230,7 +230,7 @@ class KitchenLowdimRunner(BaseLowdimRunner):
             past_action = None
             policy.reset()
 
-            pbar = tqdm.tqdm(total=self.max_steps, desc=f"Eval BlockPushLowdimRunner {chunk_idx+1}/{n_chunks}", 
+            pbar = tqdm.tqdm(total=self.max_steps, desc=f"Eval KitchenLowdimRunner {chunk_idx+1}/{n_chunks}", 
                 leave=False, mininterval=self.tqdm_interval_sec)
             done = False
             while not done:
