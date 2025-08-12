@@ -1,3 +1,4 @@
+This repository provides the official PyTorch implementation for the paper: Fast and Accurate Visuomotor Imitation Learning via 2D Consistency Flow Matching Policy.
 ## 📦 Installation
 
 Follow the steps below to set up the environment and install all required dependencies.
@@ -68,13 +69,13 @@ We collect image-based datasets for **MetaWorld** and **LIBERO** environments.
 
 | Environment  | Description                               | Download |
 |--------------|-------------------------------------------|----------|
-| **MetaWorld**| High-resolution image-based manipulation tasks | *Coming soon on Hugging Face* |
-| **LIBERO**   | General-purpose robot manipulation tasks  | *Coming soon on Hugging Face* |
+| **MetaWorld**| High-resolution image-based manipulation tasks | *https://huggingface.co/datasets/ShuaiTian/MetaWorld_Expert_10_Demos* |
+| **LIBERO**   | General-purpose robot manipulation tasks  | *https://huggingface.co/datasets/ShuaiTian/LIBERO_6Tasks_Expert_50_Demos* |
 
 Once released, you can download them via:
 ```bash
 git lfs install
-git clone hhttps://huggingface.co/datasets/ShuaiTian/MetaWorld_Expert_10_Demos
+git clone https://huggingface.co/datasets/ShuaiTian/MetaWorld_Expert_10_Demos
 git clone https://huggingface.co/datasets/ShuaiTian/LIBERO_6Tasks_Expert_50_Demos
 ```
 3️⃣ LIBERO Dataset Placement
